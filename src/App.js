@@ -1,25 +1,83 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: '',
+      lists: []
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    // this.deleteList = this.deleteList.bind(this);
+  }
+
+  handleSubmit(e) {
+    // get the state and concat the value
+    this.setState({
+      lists: this.state.lists.concat({
+        value: this.state.value,
+        isEditing: false,
+        isDone: true
+      }),
+      value: ''
+    });
+  }
+  // updating the state
+  handleChange(e) {
+    this.setState({
+      value: e.target.value
+    });
+  }
+
+  // deleting the list item
+  deleteList(idx) {
+    let currentList = this.state.lists.slice();
+
+    currentList.splice(idx, 1);
+
+    this.setState({
+      lists: currentList
+    });
+  }
+
+  // cross out the words if users clicks done button
+  doneButton(idx) {
+    let currentList = this.state.lists.slice();
+
+    currentList[idx].isDone = !currentList[idx].isDone;
+
+    this.setState({
+      lists: currentList
+    });
+  }
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <h1>Todo App</h1>
+        {/* //<pre>{JSON.stringify(this.state, null, 4)}</pre> */}
+        <input
+          type="text"
+          value={this.state.value}
+          onChange={this.handleChange}
+        />
+        <button onClick={this.handleSubmit}>Submit</button>
+
+        <ul>
+          {this.state.lists.map((list, idx) => {
+            return (
+              <li key={idx}>
+                {list.value}
+                {list.isDone.toString()}
+                {/* {list.isDone.toString()}|
+                {list.isEditing.toString()} */}
+                <button onClick={() => this.deleteList(idx)}>Delete</button>
+                <button onClick={() => this.doneButton(idx)}>Done</button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     );
   }
