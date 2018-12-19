@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+// import Input from '../components/Input';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ class App extends Component {
       lists: this.state.lists.concat({
         value: this.state.value,
         isEditing: false,
-        isDone: true
+        isDone: false
       }),
       value: ''
     });
@@ -66,10 +66,14 @@ class App extends Component {
 
         <ul>
           {this.state.lists.map((list, idx) => {
+            const spanStyle = {
+              textDecoration: list.isDone ? 'line-through' : ''
+            };
             return (
               <li key={idx}>
-                {list.value}
-                {list.isDone.toString()}
+                <span style={spanStyle}>{list.value}</span>
+
+                {/* //{list.isDone.toString()} */}
                 {/* {list.isDone.toString()}|
                 {list.isEditing.toString()} */}
                 <button onClick={() => this.deleteList(idx)}>Delete</button>
